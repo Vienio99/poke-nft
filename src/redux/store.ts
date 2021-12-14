@@ -1,7 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
+import blockchainReducer from "./blockchain/blockchainSlice";
 
 export const store = configureStore({
   reducer: {
+    blockchain: blockchainReducer,
   },
 });
 

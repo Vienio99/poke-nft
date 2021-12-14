@@ -22,6 +22,10 @@ module.exports = {
     },
   },
   rules: {
+    "no-param-reassign": [
+      "error",
+      { props: true, ignorePropertyModificationsFor: ["state"] },
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",

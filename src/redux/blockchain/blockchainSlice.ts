@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Web3 from "web3";
+import { Contract } from "web3-eth-contract";
 
 // Define a type for the slice state
 interface BlockchainState {
   loading: boolean;
   account: string | null;
-  pokeToken: string | null;
-  web3: string | null;
+  pokeToken: Contract | null;
+  web3: Web3 | null;
   errorMsg: string;
 }
 
@@ -24,13 +26,13 @@ export const blockchainSlice = createSlice({
   initialState,
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    connectionRequest: (state) => {
+    connectionRequest: () => {
       return {
-        ...state,
+        ...initialState,
         loading: true,
       };
     },
-    connectionSuccess: (state, action: PayloadAction<object>) => {
+    connectionSuccess: (state, action: PayloadAction<{account: string, pokeToken: Contract, web3: Web3}>) => {
       return {
         ...state,
         loading: false,
@@ -41,15 +43,21 @@ export const blockchainSlice = createSlice({
     },
     connectionFailed: (state, action: PayloadAction<string>) => {
       return {
-        ...state,
+        ...initialState,
         loading: false,
         errorMsg: action.payload,
+      };
+    },
+    updateAccount: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        account: action.payload,
       };
     },
   },
 });
 
-export const { connectionRequest, connectionSuccess, connectionFailed } = blockchainSlice.actions;
+export const { connectionRequest, connectionSuccess, connectionFailed, updateAccount } = blockchainSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => {

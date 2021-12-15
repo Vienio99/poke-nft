@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     jest: true,
   },
-  extends: ["plugin:react/recommended", "airbnb"],
+  extends: ["plugin:react/recommended", "airbnb", "prettier"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
@@ -22,10 +22,10 @@ module.exports = {
     },
   },
   rules: {
-    "no-param-reassign": [
-      "error",
-      { props: true, ignorePropertyModificationsFor: ["state"] },
-    ],
+    "no-shadow": "off",
+    "max-len": ["error", { code: 150 }],
+    // "@typescript-eslint/no-shadow": ["error"],
+    "no-param-reassign": ["error", { props: true, ignorePropertyModificationsFor: ["state"] }],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -36,11 +36,7 @@ module.exports = {
         tsx: "never",
       },
     ],
-    "react/jsx-filename-extension": [
-      2,
-      { extensions: [".js", ".jsx", ".ts", ".tsx"] },
-    ],
-    quotes: [2, "double", { avoidEscape: true }],
+    "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx", ".ts", ".tsx"] }],
     // "import/prefer-default-export": "off",
     "arrow-body-style": ["error", "always"],
     "react/function-component-definition": [

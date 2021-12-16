@@ -38,7 +38,7 @@ module.exports = {
     ],
     "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx", ".ts", ".tsx"] }],
     // "import/prefer-default-export": "off",
-    "arrow-body-style": ["error", "always"],
+    "arrow-body-style": [0],
     "react/function-component-definition": [
       2,
       {

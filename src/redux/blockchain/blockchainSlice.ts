@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
+import { AbiItem } from "web3-utils";
+import PokeToken from "../../contracts/PokeToken.json";
+import { AppDispatch } from "../store";
 
 // Define a type for the slice state
 interface BlockchainState {
@@ -21,7 +24,7 @@ const initialState: BlockchainState = {
 };
 
 export const blockchainSlice = createSlice({
-  name: "counter",
+  name: "blockchain",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
@@ -32,7 +35,7 @@ export const blockchainSlice = createSlice({
         loading: true,
       };
     },
-    connectionSuccess: (state, action: PayloadAction<{account: string, pokeToken: Contract, web3: Web3}>) => {
+    connectionSuccess: (state, action: PayloadAction<{ account: string; pokeToken: Contract; web3: Web3 }>) => {
       return {
         ...state,
         loading: false,
@@ -58,6 +61,60 @@ export const blockchainSlice = createSlice({
 });
 
 export const { connectionRequest, connectionSuccess, connectionFailed, updateAccount } = blockchainSlice.actions;
+
+declare global {
+  // eslint-disable-next-line no-unused-vars
+  interface Window {
+    ethereum: any;
+  }
+}
+
+export const connect = () => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(connectionRequest());
+    if (window.ethereum) {
+      const web3: Web3 = new Web3(window.ethereum);
+      // TO-DO: check if user is already connected
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      try {
+        const accounts: Array<string> = await window.ethereum.request({
+          method: "eth_accounts",
+        });
+        console.log(`Account ${accounts[0]}`);
+        const networkId: keyof typeof PokeToken.networks = await window.ethereum.request({
+          method: "net_version",
+        });
+        // This network id is wrong
+        console.log(networkId);
+        // TO-DO: change string to network ID
+        const pokeTokenNetworkData = await PokeToken.networks["1639484887177"];
+        if (networkId) {
+          const pokeToken = new web3.eth.Contract(PokeToken.abi as AbiItem[], pokeTokenNetworkData.address);
+          dispatch(
+            connectionSuccess({
+              account: accounts[0],
+              pokeToken,
+              web3,
+            })
+          );
+          window.ethereum.on("accountsChanged", (accounts: Array<string>) => {
+            dispatch(updateAccount(accounts[0]));
+          });
+          window.ethereum.on("chainChanged", () => {
+            window.location.reload();
+          });
+        } else {
+          dispatch(connectionFailed("Change network to Polygon."));
+        }
+      } catch (error) {
+        console.log(error);
+        dispatch(connectionFailed("Something went wrong."));
+      }
+    } else {
+      dispatch(connectionFailed("Install Metamask."));
+    }
+  }
+};
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => {

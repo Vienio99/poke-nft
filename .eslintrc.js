@@ -23,7 +23,7 @@ module.exports = {
   },
   rules: {
     "no-shadow": "off",
-    "max-len": ["error", { code: 150 }],
+    "max-len": ["error", { code: 1000 }],
     // "@typescript-eslint/no-shadow": ["error"],
     "no-param-reassign": ["error", { props: true, ignorePropertyModificationsFor: ["state"] }],
     "import/extensions": [

@@ -69,13 +69,6 @@ declare global {
   }
 }
 
-interface PokeTokenNetworkData {
-    events: {};
-    links: {};
-    address: string;
-    transactionHash: string;
-}
-
 export const connect = () => {
   return async (dispatch: AppDispatch) => {
     dispatch(connectionRequest());
@@ -91,8 +84,8 @@ export const connect = () => {
         const networkId: keyof typeof PokeToken.networks = await window.ethereum.request({
           method: "net_version",
         });
-        const pokeTokenNetworkData: PokeTokenNetworkData = await PokeToken.networks[networkId];
-        if (networkId) {
+        const pokeTokenNetworkData = await PokeToken.networks[networkId];
+        if (networkId === Object.keys(PokeToken.networks)[0]) {
           const pokeToken: Contract = new web3.eth.Contract(PokeToken.abi as AbiItem[], pokeTokenNetworkData.address);
           dispatch(
             connectionSuccess({

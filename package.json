@@ -33,7 +33,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "spinup": "truffle networks --clean && truffle migrate --reset & ganache-cli -d --allowUnlimitedContractSize"
   },
   "eslintConfig": {
     "extends": [

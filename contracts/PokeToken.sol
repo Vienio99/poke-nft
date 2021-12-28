@@ -59,7 +59,19 @@ contract PokeToken is ERC721, Ownable {
     }
 
     // Getters
-    function getPokemons() public view returns(Pokemon[] memory){
+    function getPokemons() public view returns(Pokemon[] memory) {
         return pokemons;
+    }
+
+    function getOwnerPokemons(address _owner) public view returns(Pokemon[] memory) {
+        Pokemon[] memory result = new Pokemon[](balanceOf(_owner));
+        uint256 counter = 0;
+        for (uint256 i = 0; i < pokemons.length; i++) {
+            if (ownerOf(i) == _owner) {
+                result[counter] = pokemons[i];
+                counter++;
+            }
+        }
+        return result;
     }
 }

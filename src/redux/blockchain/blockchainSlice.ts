@@ -6,7 +6,7 @@ import PokeToken from "../../contracts/PokeToken.json";
 import { AppDispatch } from "../store";
 
 // Define a type for the slice state
-interface BlockchainState {
+export interface BlockchainState {
   loading: boolean;
   account: string | null;
   pokeToken: Contract | null;

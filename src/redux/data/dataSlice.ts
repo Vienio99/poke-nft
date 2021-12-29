@@ -61,6 +61,8 @@ declare global {
   }
 }
 
+// TO-DO: change passing blockchain to function to store.getState()
+// TO-DO: maybe move it to the App itself?
 export const fetchData = (account: string, blockchain: BlockchainState) => {
   return async (dispatch: AppDispatch) => {
     dispatch(fetchDataRequest());
@@ -77,7 +79,7 @@ export const fetchData = (account: string, blockchain: BlockchainState) => {
       }
     } catch (err) {
       console.log(err);
-      dispatch(fetchDataFailed('error'));
+      dispatch(fetchDataFailed("error"));
     }
   };
 };

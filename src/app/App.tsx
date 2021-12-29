@@ -16,6 +16,20 @@ const App = () => {
     }
   };
 
+  const handleMintNFT = (_account: string | null, _name: string) => {
+    if (_account !== null && blockchain.pokeToken !== null) {
+      blockchain.pokeToken.methods
+        .createRandomPokemon(_name)
+        .send({ from: _account, value: 1000000000000000000 })
+        .once("error", () => {
+          console.log("Error minting Pokemon NFT");
+        }).then((receipt: string) => {
+          console.log("Successfully minted NFT!")
+          console.log(receipt);
+        });
+    }
+  };
+
   return (
     <div className="App">
       <div className="flex flex-col">
@@ -31,9 +45,16 @@ const App = () => {
           Connect wallet
         </button>
         <p className="text-center">Current address: {blockchain.account}</p>
-        <button type="button" onClick={handleFetchData} className="border border-black w-1/6 self-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Fetch data
-        </button>
+        {blockchain.account && (
+          <>
+            <button type="button" onClick={handleFetchData} className="border border-black w-1/6 self-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              Fetch data
+            </button>
+            <button type="button" onClick={() => handleMintNFT(blockchain.account, "Clumzy")} className="border border-black w-1/6 self-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              Mint Pokemon NFT
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

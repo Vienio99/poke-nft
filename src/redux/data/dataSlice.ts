@@ -75,6 +75,7 @@ export const fetchData = (account: string, blockchain: BlockchainState) => {
         const allPokemons: Array<any> = await pokeContract.methods.getPokemons().call();
         const allOwnerPokemons: Array<any> = await pokeContract.methods.getOwnerPokemons(account).call();
         console.log(allPokemons);
+        console.log(allOwnerPokemons);
         dispatch(fetchDataSuccess({ allPokemons, allOwnerPokemons }));
       }
     } catch (err) {
